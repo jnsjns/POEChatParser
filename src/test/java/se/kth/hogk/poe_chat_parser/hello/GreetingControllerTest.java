@@ -59,6 +59,19 @@ public class GreetingControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.is(1)))
                 .andExpect(jsonPath("$.content", Matchers.is("Hello, User!")));
     }
+
+    @Test
+    public void counterTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/greeting").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.is(1)));
+        mvc.perform(MockMvcRequestBuilders.get("/greeting").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.is(2)));
+        mvc.perform(MockMvcRequestBuilders.get("/greeting").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.is(3)));
+    }
 }
 
 
