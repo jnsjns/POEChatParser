@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.net.URL;
-import java.util.concurrent.atomic.AtomicLong;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +16,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class GreetingControllerIT {
@@ -25,9 +26,9 @@ public class GreetingControllerIT {
 
     private URL base;
 
-
     @Autowired
     private TestRestTemplate template;
+
 
     @Before
     public void setUp() throws Exception {
@@ -35,26 +36,30 @@ public class GreetingControllerIT {
     }
 
     @Test
-    public void getHello() throws Exception {
+    public void testHello() throws Exception {
         ResponseEntity<String> response = template.getForEntity(base.toString(),
                 String.class);
         assertThat(response.getBody(), equalTo("Welcome to my program"));
     }
 
     @Test
-    public void getGreeting() throws Exception {
-        this.base = new URL("http://localhost:" + port + "/greeting");
+    public void testGreeting() throws Exception {
+        /*this.base = new URL(base + "greeting");
         ResponseEntity<String> response = template.getForEntity(base.toString(),
                 String.class);
-        assertThat(response.getBody(), equalTo("{\"id\":1,\"content\":\"Hello, World!\"}"));
+        assertThat(response.getBody(), equalTo("{\"id\":1,\"content\":\"Hello, World!\"}"));*/
+        GreetingController greetingController = new GreetingController();
+        Greeting result = greetingController.greeting("World");
+        assertThat(result.getId(), Matchers.is((long)1));
+        assertThat(result.getContent(), Matchers.is("Hello, World!"));
     }
 
     @Test
-    public void getGreetingUser() throws Exception {
-        this.base = new URL("http://localhost:" + port + "/greeting?name=User");
-        ResponseEntity<String> response = template.getForEntity(base.toString(),
-                String.class);
-        assertThat(response.getBody(), equalTo("{\"id\":1,\"content\":\"Hello, User!\"}"));
+    public void testGreetingUser() throws Exception {
+        GreetingController greetingController = new GreetingController();
+        Greeting result = greetingController.greeting("User");
+        assertThat(result.getId(), Matchers.is((long)1));
+        assertThat(result.getContent(), Matchers.is("Hello, User!"));
     }
 
 }
