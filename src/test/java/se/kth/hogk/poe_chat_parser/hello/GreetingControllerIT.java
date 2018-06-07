@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,7 @@ public class GreetingControllerIT {
     private int port;
 
     private URL base;
+
 
     @Autowired
     private TestRestTemplate template;
